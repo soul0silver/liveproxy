@@ -41,9 +41,3 @@ app:
   rotate-path: ${CREATE_ROTATE:/public/rotate-schedule}
   remote-port-path: ${REMOTE_PORT_PATH:/public/remote-port}
   device-ids: ${DEVICE_IDS:6794caa885efffb2841c78d6,67935a8e85efffb2848d2f51}
-
-  spring.mail.host=smtp.gmail.com
-  spring.mail.port=587
-  spring.mail.properties.mail.smtp.auth=true
-  spring.mail.properties.mail.smtp.starttls.enable=true
-  spring.mail.properties.mail.smtp.ssl.enable = true
