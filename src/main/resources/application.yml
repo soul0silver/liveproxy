@@ -1,0 +1,49 @@
+spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    protocol: smtp
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 100
+          batch_versioned_data: true
+        order_updates: true
+        generate_statistics: true
+        cache:
+          use_second_level_cache: false
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+  datasource:
+    url: ${DATABASE_URL:jdbc:mysql://45.76.179.242:3309/proxy_server}
+    username: ${DATABASE_USERNAME:root}
+    password: ${DATABASE_PASS:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+server:
+  port: ${PORT:8002}
+  servlet:
+    context-path: /api/v1
+PAYOS_CLIENT_ID: ${CLIENT_ID:539a94f3-d904-4697-be1a-572d130dce7c}
+PAYOS_API_KEY: ${API_KEY:e22f1eee-dd96-44dc-81f9-07f6f16fe4df}
+PAYOS_CHECKSUM_KEY: ${CHECKSUM_KEY:a7f5961140301722ce93f7433e7a304676c27559bf056144060134595feac4b1}
+app:
+  schedule: ${DELAY_TIME:1}
+  url-list-order: https://api-app.payos.vn/organizations/738cc5a0be2011ef964c0242ac110002/statistics/payment-link
+  url-login-payos: https://api-app.payos.vn/auth/sign-in
+  email-payos: 0wtfwtf0@gmail.com
+  pass-payos: 5036d0c586b98278a49cf30655d0013b7681020f79f8dd6a03764a72ecd397493ef1f25a188cab29e8d01315f985ab7f37d05b1f0ab9d179ecdd7caa7d8a2b7a
+  x-api-key: ${X_API_KEY:bZ932tlniM}
+  proxy-control-url: ${PROXY_CONTROL_URL:https://api.tsproxy.com/api/v1}
+  list-path: ${LIST_PATH:/public/proxy-list}
+  change-ip-path: ${CHANGE_IP_PATH:/public/reload}
+  rotate-path: ${CREATE_ROTATE:/public/rotate-schedule}
+  remote-port-path: ${REMOTE_PORT_PATH:/public/remote-port}
+  device-ids: ${DEVICE_IDS:6794caa885efffb2841c78d6,67935a8e85efffb2848d2f51}
+
+  spring.mail.host=smtp.gmail.com
+  spring.mail.port=587
+  spring.mail.properties.mail.smtp.auth=true
+  spring.mail.properties.mail.smtp.starttls.enable=true
+  spring.mail.properties.mail.smtp.ssl.enable = true

@@ -1,0 +1,2 @@
+insert into proxy_server.users (id, password, created_by, username, updated_at, updated_by, created_at, wallet)
+values  (1, '$2a$10$ZwthxSxD1dQ6T8Qp/AFTFufT1pjO3YZ1ZeJHLVprHjz5Spad2uTiO', 'anonymousUser', 'aloalo@gmail.com', '2025-01-01 10:45:56', 'anonymousUser', '2024-12-28 04:51:27', 25000);
