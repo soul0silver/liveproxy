@@ -133,7 +133,7 @@ public class KeyServiceImpl implements KeyService {
                                     .mapToInt(CustomerKey::getPrice).sum() * request.getTimes();
 
 
-                            if (count < 0) {
+                            if (count > user.getWallet()) {
                                 throw new NotEnoughMoneyEx("Not enough money");
                             }
 
