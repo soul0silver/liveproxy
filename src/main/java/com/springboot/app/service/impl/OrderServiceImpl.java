@@ -1,12 +1,8 @@
 package com.springboot.app.service.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.app.config.AppProperties;
 import com.springboot.app.dto.OrderCriteria;
 import com.springboot.app.dto.OrderRequest;
-import com.springboot.app.dto.PayosResponse;
 import com.springboot.app.dto.constant.ProxyType;
 import com.springboot.app.entity.Order;
 import com.springboot.app.entity.User;
@@ -22,23 +18,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import vn.payos.PayOS;
-import vn.payos.type.CheckoutResponseData;
-import vn.payos.type.PaymentLinkData;
+import vn.payos.model.v2.paymentRequests.CreatePaymentLinkRequest;
+import vn.payos.model.v2.paymentRequests.CreatePaymentLinkResponse;
+import vn.payos.model.v2.paymentRequests.PaymentLink;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -56,7 +47,7 @@ public class OrderServiceImpl implements OrderService {
     private final DiscountRepo discountRepo;
 
     @Override
-    public void createOrder(CheckoutResponseData data, OrderRequest request) {
+    public void createOrder(CreatePaymentLinkResponse data, OrderRequest request) {
 
         Long cid = userRepo.findByUsername(ContextUtils.getCurrentUser())
                 .map(User::getId)
@@ -71,8 +62,8 @@ public class OrderServiceImpl implements OrderService {
                             var amount = req.getQuantity() * req.getTimes() * product.getPrice();
                             var order = Order.builder()
                                     .status("PAID")
-                                    .amount(req.getQuantity() * req.getTimes() >= d.getQuantity() && amount >= d.getTotal() ?
-                                            amount * (100 - d.getPercent()) / 100 : amount)
+                                    .amount((req.getQuantity() * req.getTimes() >= d.getQuantity() && amount >= d.getTotal() ?
+                                            (long) amount * (100 - d.getPercent()) / 100 : amount))
                                     .cid(cid)
                                     .pid(product.getId())
                                     .keyType(ProxyType.fromKey(product.getType()))
@@ -90,7 +81,7 @@ public class OrderServiceImpl implements OrderService {
                                 orderRepo.save(Order.builder()
                                         .amount(data.getAmount())
                                         .orderCode(data.getOrderCode())
-                                        .status(data.getStatus())
+                                        .status(data.getStatus().getValue())
                                         .cid(cid)
                                         .keyType(null)
                                         .content(getContent(null, null))
@@ -118,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepo.findByOrderCode(orderCode).ifPresentOrElse(
                 o -> {
                     try {
-                        PaymentLinkData order = payOS.getPaymentLinkInformation(orderCode);
+                        PaymentLink order = payOS.paymentRequests().get(o.getOrderCode());
                         userRepo.findById(o.getCid())
                                 .ifPresentOrElse(
                                         user -> {
@@ -208,14 +199,14 @@ public class OrderServiceImpl implements OrderService {
                 .forEach(o -> {
                     try {
                         if (Objects.nonNull(o.getOrderCode())) {
-                            PaymentLinkData order = payOS.getPaymentLinkInformation(o.getOrderCode());
-                            if (order.getStatus().equals("PAID")) {
+                            PaymentLink order = payOS.paymentRequests().get(o.getOrderCode());
+                            if (order.getStatus().getValue().equals("PAID")) {
                                 o.setStatus("PAID");
                                 orderRepo.save(o);
                                 userRepo.recharge(order.getAmountPaid(), o.getCid());
                             }
 
-                            if (order.getStatus().equals("CANCELLED")) {
+                            if (order.getStatus().getValue().equals("CANCELLED")) {
                                 orderRepo.delete(o);
                             }
                         }

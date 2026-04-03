@@ -19,11 +19,11 @@ public interface UserRepo extends JpaRepository<User, Long> {
     @Query(value = """
             UPDATE users u SET u.wallet = (u.wallet - :amount) WHERE id = :id
             """, nativeQuery = true)
-    void updateWallet(@Param("amount") int amount, @Param("id") Long userId);
+    void updateWallet(@Param("amount") long amount, @Param("id") Long userId);
 
     @Modifying
     @Query(value = """
             UPDATE users u SET u.wallet = (u.wallet + :amount) WHERE id = :id
             """, nativeQuery = true)
-    void recharge(@Param("amount") int amount, @Param("id") Long userId);
+    void recharge(@Param("amount") long amount, @Param("id") Long userId);
 }

@@ -12,5 +12,5 @@ import lombok.Setter;
 @Setter
 public class RechargeRequest {
     @Min(1000)
-    private int amount;
+    private long amount;
 }

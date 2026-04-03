@@ -18,7 +18,7 @@ public class Order extends BaseEntity {
     @Column(name = "order_code")
     private Long orderCode;
     private String status;
-    private int amount;
+    private Long amount;
     private Long pid;
     @Column(name = "key_type")
     private String keyType;

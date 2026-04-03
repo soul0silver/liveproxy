@@ -5,10 +5,10 @@ import com.springboot.app.dto.OrderCriteria;
 import com.springboot.app.dto.OrderRequest;
 import com.springboot.app.entity.Order;
 import org.springframework.data.domain.Page;
-import vn.payos.type.CheckoutResponseData;
+import vn.payos.model.v2.paymentRequests.CreatePaymentLinkResponse;
 
 public interface OrderService {
-    void createOrder(CheckoutResponseData data, OrderRequest request);
+    void createOrder(CreatePaymentLinkResponse data, OrderRequest request);
 
     void cancel(Long orderCode);
 

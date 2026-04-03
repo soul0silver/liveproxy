@@ -23,7 +23,7 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
     private String username;
-    private int wallet;
+    private long wallet;
     @JsonIgnore
     private Collection<? extends GrantedAuthority> roles;
 

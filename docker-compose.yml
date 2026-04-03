@@ -8,7 +8,7 @@ services:
     ports:
       - 8002:8002
     environment:
-      DATABASE_URL: jdbc:mysql://45.76.179.242:3309/proxy_server
+      DATABASE_URL: jdbc:mysql://localhost:3309/proxy_server
       DATABASE_USERNAME: root
       DATABASE_PASS: root
       CLIENT_ID: 4c1f1010-9fd6-44d6-a740-3a9b562c77b8

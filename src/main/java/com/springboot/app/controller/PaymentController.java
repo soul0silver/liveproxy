@@ -10,8 +10,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import vn.payos.PayOS;
-import vn.payos.type.Webhook;
-import vn.payos.type.WebhookData;
+import vn.payos.model.webhooks.Webhook;
+import vn.payos.model.webhooks.WebhookData;
+
 
 @RestController
 @RequestMapping("/payment")
@@ -30,7 +31,7 @@ public class PaymentController {
 
     ObjectMapper objectMapper = new ObjectMapper();
     ObjectNode response = objectMapper.createObjectNode();
-    Webhook webhookBody = objectMapper.treeToValue(body, Webhook.class);
+    var webhookBody = objectMapper.treeToValue(body, Webhook.class);
 
     try {
       // Init Response
@@ -38,7 +39,7 @@ public class PaymentController {
       response.put("message", "Webhook delivered");
       response.set("data", null);
 
-      WebhookData data = payOS.verifyPaymentWebhookData(webhookBody);
+      WebhookData data = payOS.webhooks().verify(webhookBody);
       System.out.println(data);
       return response;
     } catch (Exception e) {

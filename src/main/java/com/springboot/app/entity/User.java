@@ -25,7 +25,7 @@ public class User extends BaseEntity {
     @NotBlank
     @Length(min = 10)
     private String password;
-    private int wallet;
+    private long wallet;
 
     @JsonManagedReference
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

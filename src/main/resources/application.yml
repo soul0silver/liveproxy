@@ -17,7 +17,7 @@ spring:
       ddl-auto: none
     show-sql: true
   datasource:
-    url: ${DATABASE_URL:jdbc:mysql://45.76.179.242:3309/proxy_server}
+    url: ${DATABASE_URL:jdbc:mysql://localhost:3308/wwproxy}
     username: ${DATABASE_USERNAME:root}
     password: ${DATABASE_PASS:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
