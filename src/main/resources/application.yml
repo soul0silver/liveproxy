@@ -25,9 +25,9 @@ server:
   port: ${PORT:8002}
   servlet:
     context-path: /api/v1
-PAYOS_CLIENT_ID: ${CLIENT_ID:539a94f3-d904-4697-be1a-572d130dce7c}
-PAYOS_API_KEY: ${API_KEY:e22f1eee-dd96-44dc-81f9-07f6f16fe4df}
-PAYOS_CHECKSUM_KEY: ${CHECKSUM_KEY:a7f5961140301722ce93f7433e7a304676c27559bf056144060134595feac4b1}
+PAYOS_CLIENT_ID: ${CLIENT_ID:4c1f1010-9fd6-44d6-a740-3a9b562c77b8}
+PAYOS_API_KEY: ${API_KEY:cac89ce6-dad0-4662-a978-633a215e8db0}
+PAYOS_CHECKSUM_KEY: ${CHECKSUM_KEY:3f3c9a8667a78814ad136bbc98b46b6eeb1a6ad503093c79720794054017843c}
 app:
   schedule: ${DELAY_TIME:1}
   url-list-order: https://api-app.payos.vn/organizations/738cc5a0be2011ef964c0242ac110002/statistics/payment-link

@@ -81,7 +81,7 @@ public class ProxyServiceImpl implements ProxyService {
         return result.stream().map(Proxy::getHttpRemote).collect(Collectors.toList());
     }
 
-    @Scheduled(fixedDelay = 3, timeUnit = TimeUnit.MINUTES)
+//    @Scheduled(fixedDelay = 3, timeUnit = TimeUnit.MINUTES)
     void update() {
         ObjectMapper mapper = new ObjectMapper();
         List<Proxy> list = new ArrayList<>();
@@ -103,7 +103,7 @@ public class ProxyServiceImpl implements ProxyService {
         proxyRepo.saveAll(list);
     }
 
-    @Scheduled(fixedDelay = 3, timeUnit = TimeUnit.MINUTES)
+//    @Scheduled(fixedDelay = 3, timeUnit = TimeUnit.MINUTES)
     void autoChangePort() {
         List<InUsePort> list = inUseProxyRepo.list(50);
         list.parallelStream().forEach(proxy -> {

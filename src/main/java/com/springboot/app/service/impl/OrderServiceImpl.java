@@ -4,6 +4,7 @@ import com.springboot.app.config.AppProperties;
 import com.springboot.app.dto.OrderCriteria;
 import com.springboot.app.dto.OrderRequest;
 import com.springboot.app.dto.constant.ProxyType;
+import com.springboot.app.entity.Discount;
 import com.springboot.app.entity.Order;
 import com.springboot.app.entity.User;
 import com.springboot.app.exception.BusinessEx;
@@ -56,9 +57,11 @@ public class OrderServiceImpl implements OrderService {
         Optional.ofNullable(request)
                 .ifPresentOrElse(
                         req -> {
-                            var product = productRepo.findByName(req.getName())
+                            var product = productRepo.findByType(req.getType())
                                     .orElseThrow(BusinessEx::new);
-                            var d = discountRepo.findDiscountByType(ProxyType.fromKey(product.getType()));
+                            var d = Optional.ofNullable(
+                                    discountRepo.findDiscountByType(ProxyType.fromKey(product.getType())))
+                                    .orElse(new Discount());
                             var amount = req.getQuantity() * req.getTimes() * product.getPrice();
                             var order = Order.builder()
                                     .status("PAID")
