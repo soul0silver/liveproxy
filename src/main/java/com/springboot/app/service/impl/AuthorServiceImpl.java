@@ -7,6 +7,7 @@ import com.springboot.app.repo.AuthorRepo;
 import com.springboot.app.service.AuthorService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,9 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorRepo authorRepo;
 
     @Override
-    public Page<Author> list(int page, int size) {
-        return authorRepo.findAll(PageRequest.of(page, size));
+    public Page<Author> list(int page, int size, String name) {
+        name = StringUtils.isNotBlank(name) ? "%" + name + "%" : "%%";
+        return authorRepo.findAllByNameLike(PageRequest.of(page, size), name);
     }
 
     @Override

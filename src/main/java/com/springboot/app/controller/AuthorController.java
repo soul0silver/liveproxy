@@ -16,8 +16,10 @@ public class AuthorController {
 
     @GetMapping
     ResponseEntity<PagingRes> list(@RequestParam(defaultValue = "0") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
-        return ResponseEntity.ok(PagingRes.of(authorService.list(page, size)));
+                                   @RequestParam(defaultValue = "10") int size,
+                                   @RequestParam(defaultValue = "") String name
+                                   ) {
+        return ResponseEntity.ok(PagingRes.of(authorService.list(page, size, name)));
     }
 
     @GetMapping("/{id}")

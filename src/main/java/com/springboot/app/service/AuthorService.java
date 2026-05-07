@@ -5,7 +5,7 @@ import com.springboot.app.entity.Author;
 import org.springframework.data.domain.Page;
 
 public interface AuthorService {
-    Page<Author> list(int page, int size);
+    Page<Author> list(int page, int size, String name);
 
     Author getById(Long id);
 
