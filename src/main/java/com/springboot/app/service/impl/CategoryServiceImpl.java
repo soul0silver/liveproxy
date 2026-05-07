@@ -7,6 +7,7 @@ import com.springboot.app.repo.CategoryRepo;
 import com.springboot.app.service.CategoryService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -18,8 +19,9 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepo categoryRepo;
 
     @Override
-    public Page<Category> list(int page, int size) {
-        return categoryRepo.findAll(PageRequest.of(page, size));
+    public Page<Category> list(int page, int size, String name) {
+        name = StringUtils.isNotBlank(name) ? "%" + name + "%" : "%%";
+        return categoryRepo.findAllByNameLike(PageRequest.of(page - 1, size), name);
     }
 
     @Override

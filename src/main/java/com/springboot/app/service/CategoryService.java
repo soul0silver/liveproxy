@@ -5,7 +5,7 @@ import com.springboot.app.entity.Category;
 import org.springframework.data.domain.Page;
 
 public interface CategoryService {
-    Page<Category> list(int page, int size);
+    Page<Category> list(int page, int size, String name);
 
     Category getById(Long id);
 
