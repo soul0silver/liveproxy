@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> list(int page, int size, String name) {
         name = StringUtils.isNotBlank(name) ? "%" + name + "%" : "%%";
-        return categoryRepo.findAllByNameLike(PageRequest.of(page - 1, size), name);
+        return categoryRepo.findAllByNameLike(PageRequest.of(page, size), name);
     }
 
     @Override

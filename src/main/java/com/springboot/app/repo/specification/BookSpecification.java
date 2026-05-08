@@ -1,7 +1,13 @@
 package com.springboot.app.repo.specification;
 
 import com.springboot.app.dto.BookCriteria;
+import com.springboot.app.dto.constant.BookStatus;
+import com.springboot.app.entity.Author;
 import com.springboot.app.entity.Book;
+import com.springboot.app.entity.Category;
+import com.springboot.app.entity.Publisher;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
@@ -14,36 +20,109 @@ import java.util.List;
 public class BookSpecification {
 
     public Specification<Book> getSpecification(BookCriteria criteria) {
+
         return (root, query, cb) -> {
+
             List<Predicate> predicates = new ArrayList<>();
 
+            // tránh duplicate khi join many-to-many
+            query.distinct(true);
+
+            /*
+             * title
+             */
             if (StringUtils.isNotBlank(criteria.getTitle())) {
-                predicates.add(cb.like(cb.lower(root.get("title")), "%" + criteria.getTitle().toLowerCase() + "%"));
+                predicates.add(
+                        cb.like(
+                                cb.lower(root.get("title")),
+                                "%" + criteria.getTitle().toLowerCase() + "%"
+                        )
+                );
             }
 
-            if (criteria.getAuthorId() != null) {
-                predicates.add(cb.isMember(criteria.getAuthorId(), root.get("authors")));
-            }
 
-            if (criteria.getCategoryId() != null) {
-                predicates.add(cb.isMember(criteria.getCategoryId(), root.get("categories")));
-            }
-
+            /*
+             * publisher
+             */
             if (criteria.getPublisherId() != null) {
-                predicates.add(cb.equal(root.get("publisher").get("id"), criteria.getPublisherId()));
+
+                Join<Book, Publisher> publisherJoin =
+                        root.join("publisher", JoinType.INNER);
+
+                predicates.add(
+                        cb.equal(
+                                publisherJoin.get("id"),
+                                criteria.getPublisherId()
+                        )
+                );
             }
 
+            /*
+             * author
+             */
+            if (criteria.getAuthorId() != null) {
+
+                Join<Book, Author> authorJoin =
+                        root.join("authors", JoinType.INNER);
+
+                predicates.add(
+                        cb.equal(
+                                authorJoin.get("id"),
+                                criteria.getAuthorId()
+                        )
+                );
+            }
+
+            /*
+             * category
+             */
+            if (criteria.getCategoryId() != null) {
+
+                Join<Book, Category> categoryJoin =
+                        root.join("categories", JoinType.INNER);
+
+                predicates.add(
+                        cb.equal(
+                                categoryJoin.get("id"),
+                                criteria.getCategoryId()
+                        )
+                );
+            }
+
+            /*
+             * min price
+             */
             if (criteria.getMinPrice() != null) {
-                predicates.add(cb.ge(root.get("price"), criteria.getMinPrice()));
+                predicates.add(
+                        cb.greaterThanOrEqualTo(
+                                root.get("price"),
+                                criteria.getMinPrice()
+                        )
+                );
             }
 
+            /*
+             * max price
+             */
             if (criteria.getMaxPrice() != null) {
-                predicates.add(cb.le(root.get("price"), criteria.getMaxPrice()));
+                predicates.add(
+                        cb.lessThanOrEqualTo(
+                                root.get("price"),
+                                criteria.getMaxPrice()
+                        )
+                );
             }
 
             if (StringUtils.isNotBlank(criteria.getStatus())) {
-                predicates.add(cb.equal(root.get("status").as(String.class), criteria.getStatus()));
+                predicates.add(
+                        cb.equal(
+                                root.get("status"),
+                                BookStatus.valueOf(criteria.getStatus())
+                        )
+                );
             }
+
+
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
