@@ -21,7 +21,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Page<Author> list(int page, int size, String name) {
         name = StringUtils.isNotBlank(name) ? "%" + name + "%" : "%%";
-        return authorRepo.findAllByNameLike(PageRequest.of(page, size), name);
+        return authorRepo.findAllByNameLikeAndDeletedIsFalse(PageRequest.of(page, size), name);
     }
 
     @Override
@@ -51,6 +51,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void delete(Long id) {
         Author author = getById(id);
-        authorRepo.delete(author);
+        author.setDeleted(true);
+        authorRepo.save(author);
     }
 }

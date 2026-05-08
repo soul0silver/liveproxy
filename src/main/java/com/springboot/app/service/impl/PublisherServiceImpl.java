@@ -19,7 +19,7 @@ public class PublisherServiceImpl implements PublisherService {
 
     @Override
     public Page<Publisher> list(int page, int size) {
-        return publisherRepo.findAll(PageRequest.of(page, size));
+        return publisherRepo.findAllByDeletedIsFalse(PageRequest.of(page, size));
     }
 
     @Override
@@ -51,6 +51,7 @@ public class PublisherServiceImpl implements PublisherService {
     @Override
     public void delete(Long id) {
         Publisher publisher = getById(id);
-        publisherRepo.delete(publisher);
+        publisher.setDeleted(true);
+        publisherRepo.save(publisher);
     }
 }

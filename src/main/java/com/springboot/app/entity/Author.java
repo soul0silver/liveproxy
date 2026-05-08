@@ -23,4 +23,6 @@ public class Author extends BaseEntity {
     private String biography;
 
     private LocalDate birthDate;
+
+    private boolean deleted = false;
 }

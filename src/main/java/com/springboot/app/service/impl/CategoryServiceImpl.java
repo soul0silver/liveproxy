@@ -21,7 +21,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Page<Category> list(int page, int size, String name) {
         name = StringUtils.isNotBlank(name) ? "%" + name + "%" : "%%";
-        return categoryRepo.findAllByNameLike(PageRequest.of(page, size), name);
+        return categoryRepo.findAllByNameLikeAndDeletedIsFalse(PageRequest.of(page, size), name);
     }
 
     @Override
@@ -49,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void delete(Long id) {
         Category category = getById(id);
-        categoryRepo.delete(category);
+        category.setDeleted(true);
+        categoryRepo.save(category);
     }
 }

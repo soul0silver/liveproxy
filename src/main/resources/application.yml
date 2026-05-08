@@ -14,7 +14,7 @@ spring:
         cache:
           use_second_level_cache: false
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
   datasource:
     url: ${DATABASE_URL:jdbc:mysql://160.250.134.143:3308/test}

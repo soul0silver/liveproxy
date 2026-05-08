@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface CategoryRepo extends JpaRepository<Category, Long> {
     Optional<Category> findByName(String name);
-    Page<Category> findAllByNameLike(Pageable pageable, String name);
+    Page<Category> findAllByNameLikeAndDeletedIsFalse(Pageable pageable, String name);
 }

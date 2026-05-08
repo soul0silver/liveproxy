@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface AuthorRepo extends JpaRepository<Author, Long> {
     Optional<Author> findByName(String name);
-    Page<Author> findAllByNameLike(Pageable pageable, String name);
+    Page<Author> findAllByNameLikeAndDeletedIsFalse(Pageable pageable, String name);
 }
+

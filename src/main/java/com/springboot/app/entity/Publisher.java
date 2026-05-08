@@ -19,4 +19,5 @@ public class Publisher extends BaseEntity {
     private String address;
     private String phone;
     private String email;
+    private boolean deleted;
 }
